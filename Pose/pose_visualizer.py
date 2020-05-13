@@ -89,6 +89,7 @@ class TfPoseVisualizer:
         result = TfPoseVisualizer.draw_pose_rgb(back_ground, humans)
         return result
 
+# 输入为一帧的图片
     def inference(self, npimg):
         if npimg is None:
             raise Exception('The frame does not exist.')
