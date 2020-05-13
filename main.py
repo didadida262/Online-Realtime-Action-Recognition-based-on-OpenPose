@@ -19,7 +19,6 @@ estimator = load_pretrain_model('VGG_origin')
 # action_classifier = load_action_premodel('Action/framewise_recognition.h5')
 action_classifier = load_action_premodel('Action/framewise_recognition_under_scene.h5')
 
-
 # 参数初始化
 realtime_fps = '0.0000'
 start_time = time.time()
@@ -31,7 +30,6 @@ frame_count = 0
 # 读写视频文件（仅测试过webcam输入）
 cap = choose_run_mode(args)
 video_writer = set_video_writer(cap, write_fps=int(7.0))
-
 
 # # 保存关节数据的txt文件，用于训练过程(for training)
 # f = open('origin_data.txt', 'a+')
