@@ -15,7 +15,6 @@ args = parser.parse_args()
 # estimator = load_pretrain_model('mobilenet_thin')
 estimator = load_pretrain_model('VGG_origin')
 # 返回一个TfPoseVisualizer这么个类
-asdas
 # action_classifier = load_action_premodel('Action/framewise_recognition.h5')
 action_classifier = load_action_premodel('Action/framewise_recognition_under_scene.h5')
 
