@@ -18,16 +18,16 @@ from sklearn.metrics import confusion_matrix
 
 class Actions(Enum):
     # framewise_recognition.h5
-    # squat = 0
-    # stand = 1
-    # walk = 2
-    # wave = 3
+    squat = 0
+    stand = 1
+    walk = 2
+    wave = 3
 
     # framewise_recognition_under_scene.h5
-    stand = 0
-    walk = 1
-    operate = 2
-    fall_down = 3
+    # stand = 0
+    # walk = 1
+    # operate = 2
+    # fall_down = 3
     # run = 4
 
 
@@ -106,12 +106,12 @@ def plot_confusion_matrix(cm, classes,
 
 
 # load data
-raw_data = pd.read_csv('data_with_scene.csv', header=0)
+raw_data = pd.read_csv('data_test.csv', header=0)
 dataset = raw_data.values
-# X = dataset[:, 0:36].astype(float)
-# Y = dataset[:, 36]
-X = dataset[0:3289, 0:36].astype(float)  # 忽略run数据
-Y = dataset[0:3289, 36]
+X = dataset[:, 0:36].astype(float)
+Y = dataset[:, 36]
+# X = dataset[0:3289, 0:36].astype(float)  # 忽略run数据
+# Y = dataset[0:3289, 36]
 
 # 将类别编码为数字
 # encoder = LabelEncoder()
@@ -123,7 +123,9 @@ encoder_Y = [0]*744 + [1]*722 + [2]*815 + [3]*1008
 dummy_Y = np_utils.to_categorical(encoder_Y)
 
 # train test split
-X_train, X_test, Y_train, Y_test = train_test_split(X, dummy_Y, test_size=0.1, random_state=9)
+
+# X_train, X_test, Y_train, Y_test = train_test_split(X, dummy_Y, test_size=0.1, random_state=4)
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.1, random_state=1)
 
 # build keras model
 model = Sequential()
@@ -141,7 +143,7 @@ model.compile(loss='categorical_crossentropy', optimizer=Adam(0.0001), metrics=[
 model.fit(X_train, Y_train, batch_size=32, epochs=20, verbose=1, validation_data=(X_test, Y_test), callbacks=[his])
 model.summary()
 his.loss_plot('epoch')
-# model.save('framewise_recognition.h5')
+model.save('framewise_recognition_test.h5')
 
 # # evaluate and draw confusion matrix
 # print('Test:')
