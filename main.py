@@ -44,7 +44,7 @@ while cv.waitKey(1) < 0:
         frame_count += 1
         # pose estimation
         humans = estimator.inference(show)
-        # print('humans:',humans)
+        print('humans:',humans)
         # get pose info
         pose = TfPoseVisualizer.draw_pose_rgb(show, humans)  # return frame, joints, bboxes, xcenter
         # print('pose:',pose)

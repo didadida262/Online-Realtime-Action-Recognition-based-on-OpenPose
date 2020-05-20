@@ -28,6 +28,9 @@ def non_max_suppression(plain, window_size=3, threshold=NMS_Threshold):
 
 
 def estimate(heat_mat, paf_mat):
+    print('heat_mat:',heat_mat)
+    print('paf_mat:',paf_mat)
+    # 图片的shape可能不是h,w,channel，所以需要通过rollaxis转换一下
     if heat_mat.shape[2] == 19:
         heat_mat = np.rollaxis(heat_mat, 2, 0)
     if paf_mat.shape[2] == 38:

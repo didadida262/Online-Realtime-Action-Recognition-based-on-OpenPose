@@ -8,8 +8,8 @@ from .pose_estimator import estimate
 
 class TfPoseVisualizer:
     # the thickness of showing skeleton
+    # 直翻厚度？线条的粗细？
     Thickness_ratio = 2
-
     def __init__(self, graph_path, target_size=(368, 368)):
         self.target_size = target_size
         # load graph
@@ -102,9 +102,13 @@ class TfPoseVisualizer:
             npimg = cv.resize(npimg, self.target_size)
             rois.extend([npimg])
             infos.extend([(0.0, 0.0, 1.0, 1.0)])
-
+            
+        # output应该是我们将一帧图片扔进网络中得到的人体骨架节点的信息        
+        # 通过打印其shape，发现，是一个四维度的？其中第二个和第三个很明显是数据的函数和列数，
+        # 第一个参数是人的个数？
         output = self.persistent_sess.run(self.tensor_output, feed_dict={self.tensor_image: rois})
 
+        # 下面这俩货，我愣是看不懂，热点图和区域置信度是啥玩意
         heat_mats = output[:, :, :, :19]
         paf_mats = output[:, :, :, 19:]
 
@@ -134,5 +138,7 @@ class TfPoseVisualizer:
         self.heatMat = resized_heat_mat
         self.pafMat = resized_paf_mat / (np.log(resized_cnt_mat) + 1)
 
+        # 这一行才是精髓，给接口输入热点图和paf返回humans，跟论文的思路一致，
+        # 就是根据这俩货，画出人的骨架信息，这里，tf运行的图网络，对我们而言，就是黑盒子，无需了解
         humans = estimate(self.heatMat, self.pafMat)
         return humans
