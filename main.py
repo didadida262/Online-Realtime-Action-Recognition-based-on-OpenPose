@@ -13,8 +13,8 @@ parser.add_argument('--video', help='Path to video file.')
 args = parser.parse_args()
 
 # 导入相关模型
-# estimator = load_pretrain_model('mobilenet_thin')
-estimator = load_pretrain_model('VGG_origin')
+estimator = load_pretrain_model('mobilenet_thin')
+# estimator = load_pretrain_model('VGG_origin')
 # 返回一个TfPoseVisualizer这么个类,个中方法尚待研究
 
 # action_classifier = load_action_premodel('Action/framewise_recognition.h5')
@@ -34,7 +34,6 @@ video_writer = set_video_writer(cap, write_fps=int(7.0))
 
 # # 保存关节数据的txt文件，用于训练过程(for training)
 # f = open('origin_data.txt', 'a+')
-
 # cv.waitKey(1),1ms后返回-1，实质就是无限循环
 while cv.waitKey(1) < 0:
     # cv.waitKey(1000)
