@@ -31,7 +31,7 @@ frame_count = 0
 # 读写视频文件（仅测试过webcam输入）
 cap = choose_run_mode(args)
 video_writer = set_video_writer(cap, write_fps=int(7.0))
-
+print(111111)
 # # 保存关节数据的txt文件，用于训练过程(for training)
 # f = open('origin_data.txt', 'a+')
 
