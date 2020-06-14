@@ -114,6 +114,7 @@ class TfPoseVisualizer:
         heat_mats = output[:, :, :, :19]
         paf_mats = output[:, :, :, 19:]
 
+test git reset
         output_h, output_w = output.shape[1:3]
         max_ratio_w = max_ratio_h = 10000.0
         for info in infos:
