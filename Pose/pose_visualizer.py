@@ -97,6 +97,7 @@ class TfPoseVisualizer:
         rois = []
         infos = []
         # _get_scaled_img
+        # 疑惑:若图片大小符合要求，rois和infos就都为[]?
         if npimg.shape[:2] != (self.target_size[1], self.target_size[0]):
             # resize
             npimg = cv.resize(npimg, self.target_size)
@@ -109,6 +110,7 @@ class TfPoseVisualizer:
         output = self.persistent_sess.run(self.tensor_output, feed_dict={self.tensor_image: rois})
 
         # 下面这俩货，我愣是看不懂，热点图和区域置信度是啥玩意
+        # 上面这个问题请仔细观看作者的讲解及相关文档
         heat_mats = output[:, :, :, :19]
         paf_mats = output[:, :, :, 19:]
 
