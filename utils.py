@@ -14,10 +14,15 @@ cam_width, cam_height = 1280, 720
 input_width, input_height = 656, 368
 
 
+
+# 以用户输入参数作为输入，返回cap这么一个cv.VideroCaoture的对象实例
+# (python里头该咋说？js用多了，就这么讲了，大概意思就是这样)
+# 就是判断是直接启用摄像头读取视频流，还是直接从本地视频文件中拿视频流
 def choose_run_mode(args):
     """
     video or webcam
     """
+    # global 声明一下，表示该变量属于全局，可以直接操作其值
     global out_file_path
     if args.video:
         # Open the video file
@@ -48,6 +53,9 @@ def load_pretrain_model(model):
     return TfPoseVisualizer(graph_path, target_size=(input_width, input_height))
 
 
+# cv.VideroCaoture实例作为输入，返回一个读写器类似，并可以设置读写帧率，
+# 初始化各项参数
+# round返回数值的四舍五入取值
 def set_video_writer(cap, write_fps=15):
     return cv.VideoWriter(out_file_path,
                           cv.VideoWriter_fourcc(*'mp4v'),

@@ -16,4 +16,4 @@ import numpy as np
 # cv.waitKey()
 infos = []
 infos.extend([(0.0, 0.0, 1.0, 1.0)])
-print('infos:',infos)
+# print('infos:',infos)

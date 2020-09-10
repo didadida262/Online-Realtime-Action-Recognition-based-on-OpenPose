@@ -28,22 +28,31 @@ fps_count = 0
 run_timer = 0
 frame_count = 0
 
-# 读写视频文件（仅测试过webcam输入）
+# 读写视频文件,两种选择，直接打开摄像头实时读取，
+# 或者读取本地视频
+# cv.VideroCaoture： 摄像头
 cap = choose_run_mode(args)
+
+#cv.VideoWriter 视频读写器
 video_writer = set_video_writer(cap, write_fps=int(7.0))
 
 # # 保存关节数据的txt文件，用于训练过程(for training)
 # f = open('origin_data.txt', 'a+')
 # cv.waitKey(1),1ms后返回-1，实质就是无限循环
+
 while cv.waitKey(1) < 0:
     # cv.waitKey(1000)
+    # has_frame:boolean,应该是该帧是否读取成功？
+    # show: 显然就是帧数据，可以理解一帧就是一张图片，以数组形式存储 
     has_frame, show = cap.read()
+
+# 从这个判断基本能判定，只有在has_frame为true，即该帧有效情况下，才处理帧数据，否则丢弃（丢帧？）
     if has_frame:
         fps_count += 1
         frame_count += 1
         # pose estimation
         humans = estimator.inference(show)
-        print('humans:',humans)
+        # print('humans:',humans)
         # get pose info
         pose = TfPoseVisualizer.draw_pose_rgb(show, humans)  # return frame, joints, bboxes, xcenter
         # print('pose:',pose)

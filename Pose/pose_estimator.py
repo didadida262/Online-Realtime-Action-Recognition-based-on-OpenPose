@@ -17,8 +17,10 @@ PAF_Count_Threshold = 5
 Part_Count_Threshold = 4
 Part_Score_Threshold = 4.5
 
+# PartPair = namedtuple('PartPair', ['score', 'part_idx1', 'part_idx2', 'idx1', 'idx2',
+#                                    'coord1', 'coord2', 'score1', 'score2'], verbose=False)
 PartPair = namedtuple('PartPair', ['score', 'part_idx1', 'part_idx2', 'idx1', 'idx2',
-                                   'coord1', 'coord2', 'score1', 'score2'], verbose=False)
+                                   'coord1', 'coord2', 'score1', 'score2'])
 
 
 def non_max_suppression(plain, window_size=3, threshold=NMS_Threshold):
@@ -28,8 +30,8 @@ def non_max_suppression(plain, window_size=3, threshold=NMS_Threshold):
 
 
 def estimate(heat_mat, paf_mat):
-    print('heat_mat:',heat_mat)
-    print('paf_mat:',paf_mat)
+    # print('heat_mat:',heat_mat)
+    # print('paf_mat:',paf_mat)
     # 图片的shape可能不是h,w,channel，所以需要通过rollaxis转换一下
     if heat_mat.shape[2] == 19:
         heat_mat = np.rollaxis(heat_mat, 2, 0)
