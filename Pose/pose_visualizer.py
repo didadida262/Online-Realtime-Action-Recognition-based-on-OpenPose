@@ -114,14 +114,13 @@ class TfPoseVisualizer:
         heat_mats = output[:, :, :, :19]
         paf_mats = output[:, :, :, 19:]
 
-test git reset
         output_h, output_w = output.shape[1:3]
         max_ratio_w = max_ratio_h = 10000.0
         for info in infos:
             max_ratio_w = min(max_ratio_w, info[2])
             max_ratio_h = min(max_ratio_h, info[3])
         mat_w, mat_h = int(output_w / max_ratio_w), int(output_h / max_ratio_h)
-
+# ceshi git
         resized_heat_mat = np.zeros((mat_h, mat_w, 19), dtype=np.float32)
         resized_paf_mat = np.zeros((mat_h, mat_w, 38), dtype=np.float32)
         resized_cnt_mat = np.zeros((mat_h, mat_w, 1), dtype=np.float32)
