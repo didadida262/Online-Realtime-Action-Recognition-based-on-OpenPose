@@ -12,12 +12,13 @@ class TfPoseVisualizer:
     Thickness_ratio = 2
     def __init__(self, graph_path, target_size=(368, 368)):
         self.target_size = target_size
-        # load graph
+        # load graph,就是读取对应的网络，mobilethin还是vgg
         with tf.gfile.GFile(graph_path, 'rb') as f:
             graph_def = tf.GraphDef()
             graph_def.ParseFromString(f.read())
 
         self.graph = tf.get_default_graph()
+        # 导入网络，建立通道
         tf.import_graph_def(graph_def, name='TfPoseEstimator')
         self.persistent_sess = tf.Session(graph=self.graph)
 
@@ -89,7 +90,7 @@ class TfPoseVisualizer:
         result = TfPoseVisualizer.draw_pose_rgb(back_ground, humans)
         return result
 
-# 输入为一帧的图片
+# 输入为一帧的图片,返回图片重的人关节点坐标信息，可能存在多个人
     def inference(self, npimg):
         if npimg is None:
             raise Exception('The frame does not exist.')
@@ -98,6 +99,8 @@ class TfPoseVisualizer:
         infos = []
         # _get_scaled_img
         # 疑惑:若图片大小符合要求，rois和infos就都为[]?
+        # shape方法返回图像宽高维度
+        # 对输入图像大小调整
         if npimg.shape[:2] != (self.target_size[1], self.target_size[0]):
             # resize
             npimg = cv.resize(npimg, self.target_size)

@@ -12,10 +12,9 @@ parser = argparse.ArgumentParser(description='Action Recognition by OpenPose')
 parser.add_argument('--video', help='Path to video file.')
 args = parser.parse_args()
 
-# 导入相关模型
+# 导入相关模型,返回一个TfPoseVisualizer类
 estimator = load_pretrain_model('mobilenet_thin')
 # estimator = load_pretrain_model('VGG_origin')
-# 返回一个TfPoseVisualizer这么个类,个中方法尚待研究
 
 # action_classifier = load_action_premodel('Action/framewise_recognition.h5')
 action_classifier = load_action_premodel('Action/framewise_recognition_under_scene.h5')
@@ -51,23 +50,35 @@ while cv.waitKey(1) < 0:
         fps_count += 1
         frame_count += 1
         # pose estimation
+        
+        
+        # 关键一：输入图片，拿到图片中人的关节点信息
+        # 调用了TfPoseVisualizer的inference
         humans = estimator.inference(show)
         # print('humans:',humans)
         # get pose info
+
+        # 关键二：输入原图及上面获取的人的关节点信息合并图层获得新的图片数组，尝试直接画出pose
         pose = TfPoseVisualizer.draw_pose_rgb(show, humans)  # return frame, joints, bboxes, xcenter
         # print('pose:',pose)
         # recognize the action framewise
+
+        # 关键三：以新的图片数组为输入，再加上分类器输出最终的图片信息
         show = framewise_recognize(pose, action_classifier)
 
+        # 所以现在看来，是一针针的识别？感觉不靠谱啊
         height, width = show.shape[:2]
         # 显示实时FPS值
+        # 时间戳相减，是千分之一秒，即毫秒
         if (time.time() - start_time) > fps_interval:
             # 计算这个interval过程中的帧数，若interval为1秒，则为FPS
             # 帧率和帧数是两码事儿
+            # realtime_fps 1ms内读入的帧数，话说fps不应该是每秒吗
             realtime_fps = fps_count / (time.time() - start_time)
             fps_count = 0  # 帧数清零
             start_time = time.time()
         fps_label = 'FPS:{:.2f}'.format(realtime_fps)
+        # 看一下效果
         cv.putText(show, fps_label, (width-160, 25), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 255,0 ), 2)
 
         # 显示检测到的人数
@@ -75,6 +86,7 @@ while cv.waitKey(1) < 0:
         cv.putText(show, num_label, (5, height-45), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
 
         # 显示目前的运行时长及总帧数
+        # 从读取第一针毕记时
         if frame_count == 1:
             run_timer = time.time()
         run_time = time.time() - run_timer
